@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'dist/css/dataTables.bootstrap4.min.css' %}">
+<style media="screen"></style>
+{% endblock css %}
+
+{% block contenido %}
+<h2>Dinero total por evento:</h2>
+<canvas id="myChart" width="500" height="400"></canvas>
+{% endblock contenido %}
+
+
+{% block js %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+<script type="text/javascript">
+    options = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    responsive: true,
+                    mainAspectRatio: false
+                }
+            }]
+        }
+    }
+    $.get('{% url "reportes:dinero_por_evento_json" %}', function(data) {
+        var ctx = $("#myChart").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'bar', data: data, options: options
+        });
+    });
+</script>
+{% endblock js %}

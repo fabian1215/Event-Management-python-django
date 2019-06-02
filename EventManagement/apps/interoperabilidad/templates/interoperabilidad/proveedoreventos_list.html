@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'dist/css/dataTables.bootstrap4.min.css' %}">
+<style media="screen"></style>
+{% endblock css %}
+{% block contenido %}
+<div class = "container-fluid">
+   <div class="row">
+      <div class="col-12">
+         <div class="box box-primary">
+            <div class="box-header">
+               <h3 class="box-title">Lista de proveedores:</h3>
+            </div>
+            <div class="box-body">
+                  <table id="tabla_items" class="table table-striped table-bordered dt-responsive">
+                     <thead>
+                        <tr>
+                           <th scope="col">Nombre:</th>
+                           <th scope="col">Api URL:</th>
+                           <th scope="col">Acciones</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for proveedor_evento in proveedoreventos_list %}
+                        <tr>
+                           <td>
+                              {{proveedor_evento.nombre}}
+                            </td>
+                           <td>
+                              {{proveedor_evento.api_url}}
+                           </td>
+                           <td>
+                              <a href="{% url 'interoperabilidad:proveedor_eventos_detalle' proveedor_evento.id %}">
+                                 <span  class="btn btn-primary">
+                                    <h6>Ver detalle</h6>
+                                 </span>
+                              </a>
+                              <a href="{% url 'interoperabilidad:proveedor_eventos_actualizar' proveedor_evento.id %}">
+                                 <span class="btn btn-info">
+                                    <h6>Modificar</h6>
+                                 </span>
+                              </a>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock contenido %}
+{% block js %}
+<script>
+   $(document).ready(function() {
+     $('#tabla_items').DataTable();
+   } );
+</script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery-3.3.1.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/dataTables.bootstrap4.min.js' %}"></script>
+{% endblock js %}

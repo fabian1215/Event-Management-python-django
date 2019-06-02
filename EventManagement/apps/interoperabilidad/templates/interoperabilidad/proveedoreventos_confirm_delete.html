@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<style media="screen"></style>
+{% endblock css %}
+{% block contenido %}
+<div class = "container-fluid">
+   <div class="row">
+      <div class="col-12">
+            
+                <form  method="post">
+                    {% csrf_token %}
+                    <ul class="list-group">
+                        <div class="list-group-item border-0">
+                            <p><h1>Eliminar Item: </h1> <h2>{{object.nombre}} </h2></p>
+                        </div>
+                        <div class="list-group-item border-0">
+                            <p>¿Estas seguro que deseas eliminar el item?</p>
+                        </div>
+                        <div class="list-group-item border-0">
+                            {% if object.imagen  %}
+                                <img style="width: 100px; height: 100px;" src="{{object.imagen.url}}" class="img img-fluid">
+                            {% else %}
+                                <img style="width: 100px; height: 100px;" src="{% static 'images/item_por_defecto.png' %}" class="img img-fluid">
+                            {% endif %} 
+                        </div>
+                        <div class="list-group-item border-0">
+                            <input class="btn btn-danger"  type="submit"  value="Submit" >
+                        </div>
+                    </ul>
+            </form>
+      </div>
+   </div>
+</div>
+{% endblock contenido %}
+{% block js %}
+<script>
+</script>
+{% endblock js %}

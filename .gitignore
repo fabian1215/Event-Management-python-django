@@ -1,0 +1,9 @@
+EventosDeportivos/apps/*/migrations/
+credenciales.json
+**/__pycache__/
+*.log
+*.pot
+*.pyc
+media
+.idea
+db.sqlite3

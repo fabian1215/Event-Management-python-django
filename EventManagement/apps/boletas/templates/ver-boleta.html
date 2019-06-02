@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<style media="screen">
+</style>
+{% endblock css %}
+
+{% block contenido %}
+<div class="container col-6" id="contenedor">
+    <div class="card border-dark">
+        <div class="card-header">Boleta #{{boleta.id}}</div>
+        <div class="card-body text-dark">
+            <div class="row">
+                <div class="col-4">
+                    {% if boleta.categoria.evento.imagen  %}
+                        <img style="width: 100px" src="{{boleta.categoria.evento.imagen.url}}" class="img img-fluid">
+                    {% else %}
+                        <img style="width: 100px" src="{% static 'images/evento_por_defecto.png' %}" class="img img-fluid">
+                    {% endif %}
+                </div>
+                <div class="col-8">
+                    <h5 class="card-title">Evento: {{boleta.categoria.evento.nombre_evento}}</h5>
+                    <h6 class="card-title">Categoria: {{boleta.categoria.nombre}}</h6>
+                    <h6 class="card-title"># Ref Factura: {{boleta.factura_ref.id}}</h6>
+                    <h6 class="card-title"># Cedula: {{boleta.cedula}}</h6>
+                    <h6 class="card-title">Precio pagado: ${{boleta.precio_comprado}}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container col-1" >
+    <br>
+    <button onclick="imprimir()" class="btn btn-dark text-center">Imprimir</button>
+</div>
+
+{% endblock contenido %}
+
+{% block js %}
+<script>
+    function imprimir(){
+        var printContents = document.getElementById("contenedor").innerHTML;
+		document.body.innerHTML = printContents;
+		window.print();
+        location.reload();
+    }
+</script>
+{% endblock js %}

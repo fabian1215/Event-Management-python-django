@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<style media="screen"></style>
+{% endblock css %}
+
+{% block contenido %}
+<div class="container" id="contenedor">
+    <div class="text-center">
+         <h1>Factura</h1>
+    </div>
+
+     <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <!-- <h3 class="panel-title">Cabecera</h3> -->
+					<hr>
+                    <div class="row">
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cliente" class="col-sm-2 control-label">Cliente</label>
+                                <div class="col-sm-10">
+                                    {{factura.usuario.first_name}} {{factura.usuario.last_name}} 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                              
+                                <label for="fecha" class="col-sm-5 control-label">Fecha factura</label>
+                                <div class="col-sm-7">
+                                    {{factura.fecha_hora}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 target">
+                            <div class="form-group">
+                                <label for="id" class="col-sm-3 control-label">#</label>
+                                <div class="col-sm-9">
+                                        {{factura.id}}
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- row -->
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6"> 
+                          <address>
+                           <strong class="">Eventos Deportivos Company</strong><br class="">
+                            Avenida siempre viva 123<br class="">
+                            Springfield, USA <br class="">
+                           </address>
+                        </div>
+                   </div> <!-- row -->
+				</div> <!-- panel heading -->
+				<div class="panel-body">
+				  <h3 class="panel-title">Detalle</h3>
+				  
+				  <table class="table table-condensed">
+					<thead>
+					  <tr>
+						<th class="">Producto</th>
+						<th class="">Descripción</th>
+						<th class="">Cantidad</th>
+                        <th class="">Precio</th>
+                        <th class="">Boleta</th>
+					  </tr>
+					</thead>
+					<tbody>
+                    {% for boleta in boletas_compradas %}
+					  <tr>
+						<td class=""> {{ forloop.counter }}</td>
+						<td class="">Boleta para el evento: {{boleta.categoria.evento.nombre_evento}} en la categoria {{boleta.categoria.nombre}}</td>
+						<td class="">1</td>
+                        <td class="">${{boleta.precio_comprado}}</td>
+                        <td class=""><a href="{% url 'boletas:ver-boleta' boleta.id %}" class="btn btn-dark">Ver boleta</a></td>
+
+					  </tr>
+                      {% endfor %}
+                      <tr>
+                         <td>Precio Total: ${{precio_total}}</td> 
+                      </tr>
+					</tbody>
+				  </table>
+				</div> <!-- panel body -->
+				<div class="panel-footer">
+                    <button onclick="imprimir()" class="btn btn-dark text-center">Imprimir</button>
+				</div>
+             </div> <!-- panel -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+    <div class="row text-center">
+    </div>
+</div>    <!-- container -->
+
+{% endblock contenido %}
+
+{% block js %}
+<script>
+    function imprimir(){
+        var printContents = document.getElementById("contenedor").innerHTML;
+		document.body.innerHTML = printContents;
+		window.print();
+        location.reload();
+    }
+</script>
+{% endblock js %}

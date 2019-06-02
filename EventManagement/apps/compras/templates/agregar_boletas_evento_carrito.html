@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<style media="screen"></style>
+{% endblock css %}
+{% block contenido %}
+{{ form_evento.media }}  {# Adds date-picker required JS and CSS #}
+<div class = "container">
+   <div class="box box-primary">
+      <div class="box-header">
+         <h3 class="box-title">Añadir evento a carrito de compras:</h3>
+      </div>
+      <div class="box-body">
+         <div class="row">
+            <div class="col">
+               <div class="card">
+                  <div class="card-header">
+                     <p>{{evento.nombre_evento}}</p>
+                  </div>
+                  {% if evento.imagen  %}
+                        <img style="width: 200px" src="{{evento.imagen.url}}" class="img img-fluid">
+                  {% else %}
+                        <img style="width: 200px" src="{% static 'images/evento_por_defecto.png' %}" class="img img-fluid">
+                  {% endif %}
+                  <div class="card-body">
+                     <p class="card-text">{{evento.fecha_hora}}</p>
+                     <p class="card-text">Lugar: {{evento.lugar_realizacion}}</p>
+                     <form method="POST" id="formulario_agregar_elementos_carrito">
+                        {% csrf_token %}
+                        <span class="card-text">
+                           <div class="form-group">
+                              <label>Categoria:</label>
+                              <select id="categoria" class="form-control">
+                                 {% for categoria in categorias %}
+                                 <option value="{{categoria.id}}">{{categoria.categoria.nombre}} - ${{categoria.precio}} Pesos x Boleta</option>
+                                 {% endfor %}
+                              </select>
+                              <label>Cedula:</label>
+                              <input class="form-control" type="text" id="cedula">
+                              <label>Boletas asignadas:</label>
+                                 <table class="table table-hover form-control" >
+                                    <tbody id="lista">
+                                    </tbody>
+                                 </table>
+                           </div>
+                        </span>
+                        <input class="btn btn-dark" type='button' onclick='agregarBoleta()' value='Añadir Boleta'/> 
+                        <input class="btn btn-success" type='submit' value='Añadir TODAS al carrito de compras'/>   
+                     </form>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock contenido %}
+{% block js %}
+<script>
+ function agregarBoleta(){
+
+   var row = document.createElement("tr");
+   row.setAttribute("class", "row");
+
+   var cedula = document.getElementById('cedula').value;
+   var categoria_id = document.getElementById('categoria').value;
+   var sel = document.getElementById("categoria");
+   var categoria_texto = sel.options[sel.selectedIndex].text;
+
+   var nodo_datos = document.createElement("input");
+   nodo_datos.setAttribute("type", "hidden");
+   nodo_datos.setAttribute("value", JSON.stringify({"cedula": cedula, "categoria_id" : categoria_id}));
+   nodo_datos.setAttribute("name", "datos");
+
+   var col = document.createElement("th");
+   col.setAttribute("class", "col");
+
+   var texto = document.createTextNode("1 Boleta registrada a la cedula " + cedula + " en la Categoria: " + categoria_texto);
+   
+   col.appendChild(texto);
+   col.appendChild(texto);
+   col.appendChild(nodo_datos);
+   row.appendChild(col);
+
+   document.getElementById("lista").appendChild(row);
+
+ }
+
+</script>
+{% endblock js %}

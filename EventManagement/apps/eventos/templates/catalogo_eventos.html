@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load static %}
+{% block css %}
+<style media="screen">
+</style>
+{% endblock css %}
+{% block contenido %}
+{{ form_evento.media }}  {# Adds date-picker required JS and CSS #}
+
+<div class = "container">
+
+   <a href="{% url 'compras:carrito-compras' %}">Ir al carrito de compras <span class="badge badge-danger badge-pill ">{{cantidad_carrito}}</span></a>
+   <div class="box box-primary">
+      <div class="box-header">
+         <h3 class="box-title">Catalogo Boletas</h3>
+      </div>
+
+
+         <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#propias" role="tab" data-toggle="tab">Propias</a>
+            </li>
+            {% for evento_proveedor in eventos_proveedores %}
+            <li class="nav-item">
+               <a class="nav-link" href="#proveedor-{{evento_proveedor.proveedor_id}}" role="tab" data-toggle="tab">{{evento_proveedor.proveedor_nombre}}</a>
+            </li>
+            {% endfor %}
+          </ul>
+          
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade show active" id="propias">
+                  <div class="box-body">
+                        <div class="row">
+                           {% for evento in eventos %}
+                           <div class="col-3">
+                              <div class="card">
+                                 <div class="card-header">
+                                    <p>{{evento.nombre_evento}}</p>
+                                 </div>
+                                 <div class="card-body">
+                                   {% if evento.imagen  %}
+                                       <img style="width: 200px; height: 200px;" src="{{evento.imagen.url}}" class="img img-fluid">
+                                   {% else %}
+                                       <img style="width: 200px; height: 200px;" src="{% static 'images/evento_por_defecto.png' %}" class="img img-fluid">
+                                   {% endif %}                     <p class="card-text">{{evento.fecha_hora}}</p>
+                                    <p class="card-text">Lugar: {{evento.lugar_realizacion}}</p>
+                                    <a href="{% url 'compras:agregar-boletas-evento-carrito' evento.id %}" class="btn btn-dark">Añadir al carrito</a>
+                                 </div>
+                                 <div class="card-footer">
+                                 </div>
+                              </div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                     </div>
+            </div>
+            {% for evento_proveedor in eventos_proveedores %}
+            <div role="tabpanel" class="tab-pane fade" id="proveedor-{{evento_proveedor.proveedor_id}}">
+                  <div class="row">
+                  {% for evento in evento_proveedor.data %}
+                     <div class="col-3">
+                        <div class="card">
+                           <div class="card-header">
+                              <p>{{evento.nombre}}</p>
+                           </div>
+                           <div class="card-body">
+                              <img style="width: 200px; height: 200px;" src="{% static 'images/evento_por_defecto.png' %}" class="img img-fluid">                    
+                              <p class="card-text">{{evento.fecha}} - {{evento.hora}}  </p>
+                              <p class="card-text">Lugar: {{evento.lugar}}</p>
+                              <a target="_blank" href="{{evento.url}}" class="btn btn-secondary">Ir a la pagina</a>
+                           </div>
+                           <div class="card-footer">
+                           </div>
+                        </div>
+                     </div>
+                  {% endfor %}
+                  </div>
+            </div>
+            {% endfor %}
+
+          </div>
+
+
+
+
+   </div>
+</div>
+{% endblock contenido %}
+{% block js %}
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery-3.3.1.js' %}"></script>
+
+{% endblock js %}

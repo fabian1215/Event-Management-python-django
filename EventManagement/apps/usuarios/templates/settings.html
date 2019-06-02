@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+{% load static %}
+
+{% block css %}
+<style media="screen">
+.facebook{
+  background-color: #3b5998;
+}
+.google{
+  background-color: #c71610;
+}
+</style>
+{% endblock css %}
+
+{% block contenido %}
+  <h2>Configuración Redes sociales</h2>
+
+<div class="container">
+  <div class="row">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header facebook">
+                <h3 class="text-white">Facebook</h3>
+            </div>
+            {% if facebook_info %}
+            <div class="card-body">
+                <img class="card-img-top" src="{{facebook_info.foto}}" alt="Card image cap">
+                <p class="card-text">
+                    <p>Conectado como: </p>
+                    <a href="{{facebook_info.url_perfil}}" target="_blank">{{ facebook_info.nombre }}</a>
+                </p>
+                  {% if can_disconnect %}
+                    <form method="post" action="{% url 'social:disconnect' 'facebook' %}">
+                      {% csrf_token %}
+                      <button class="btn btn-danger" type="submit">Desvincular cuenta Facebook</button>
+                    </form>
+                  {% else %}
+                    <button class="btn btn-primary" type="button" disabled>Disconnect from Facebook</button>
+                    <p style="color: red">You must <a href="{% url 'password' %}">define a password</a> for your account before disconnecting from Facebook.</p>
+                  {% endif %}
+                </div>
+                {% else %}
+                <div class="card-body">
+                    <a class="btn btn-primary" href="{% url 'social:begin' 'facebook' %}">Vincular con Facebook</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header google">
+                <h3 class="text-white">Google</h3>
+            </div>
+            {% if google_info %}
+            <div class="card-body">
+                <img class="card-img-top" src="{{google_info.foto}}" alt="Card image cap">
+                <p class="card-text">
+                    <p>Conectado como: </p>
+                    <a href="{{google_info.url_perfil}}" target="_blank">{{ google_info.nombre }}</a>
+                </p>
+                  {% if can_disconnect %}
+                    <form method="post" action="{% url 'social:disconnect' 'google-oauth2' %}">
+                      {% csrf_token %}
+                      <button class="btn btn-danger" type="submit">Desvincular cuenta Google</button>
+                    </form>
+                  {% else %}
+                    <button class="btn btn-primary" type="button" disabled>Desvincular cuenta Google</button>
+                    <p style="color: red">Debes <a href="{% url 'password' %}">definir una contraseña </a> para tu cuenta antes de desvincularte de Google</p>
+                  {% endif %}
+                </div>
+            {% else %}
+                <div class="card-body">
+                    <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">Vincular con Google</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock js %}

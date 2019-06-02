@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% block css %}
+<style media="screen">
+</style>
+{% endblock css %}
+
+{% block contenido %}
+{{ form_evento.media }}  {# Adds date-picker required JS and CSS #}
+<div class = "container fluid">
+
+    <div class="col-md-6 col-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Actualizar Evento:</h3>
+            </div>
+            <div class="box-body">
+                <form method="POST" id="formulario_evento">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% bootstrap_field form_evento.nombre_evento %}
+                    </div>
+                    <div class="col-sm-12">
+                        {% bootstrap_field form_evento.tipo_evento %}
+                    </div>
+                    <div class="col-sm-6">
+                        {% bootstrap_field form_evento.lugar_realizacion%}
+                    </div>
+                    <div class="col-sm-6">
+                        {% bootstrap_field form_evento.fecha_hora%}
+                    </div>
+                    <div class="col-sm-12">
+                        {% bootstrap_field form_evento.imagen %}
+                    </div>
+                    <div class="col-sm-6">
+                        {% bootstrap_field form_evento.activo %}
+                    </div>
+                </div>
+                <button name="btnEvento" type="submit" class="btn btn-success">Actualizar evento</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock contenido %}
+
+{% block js %}
+{% endblock js %}
